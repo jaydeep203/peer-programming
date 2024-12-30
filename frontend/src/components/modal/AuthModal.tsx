@@ -1,22 +1,63 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useRecoilState} from 'recoil';
 import { authModal } from '../../store/atoms';
 import { twMerge } from 'tailwind-merge';
 import Button from '../ui/Button';
+import axios from 'axios';
+import { BACKEND_URL } from '../../config';
 
-interface authModalProps{
-    onSubmit: () => void;
-    type:"login" | "signup";
-}
 
-const AuthModal:React.FC<authModalProps> = ({
-    onSubmit,
-    type,
-}) => {
+const AuthModal = () => {
 
     const [isOpen, setIsOpen] = useRecoilState(authModal);
-    const [modal, setModal] = useState<string>(type);
+    const [modal, setModal] = useState<string>("login");
     const [loading, setLoading] = useState(false);
+    const [name, setName] = useState<string>("");
+    const [email, setEmail] = useState<string>("");
+    const [username, setUsername] = useState<string>("");
+    const [password, setPassword] = useState<string>("");
+
+    const login = async() => {
+
+        try{
+            const response = await axios.post(`${BACKEND_URL}/api/v1/auth/login`, {
+                username, password
+            });
+            if(response && response.data && response.data.accessToken)
+                localStorage.setItem("token", "Bearer "+response.data.accessToken);
+        } catch(e){
+            console.log(e);
+        }
+    }
+
+    const register = async() => {
+        try{
+            const response = await axios.post(`${BACKEND_URL}/api/v1/auth/register`, {
+                name, email, password, username
+            });
+
+        }catch(e){
+            console.log(e);
+        }
+    }
+
+    const submit = async(e:any) => {
+        e.preventDefault();
+        setLoading(true);
+
+        if(modal=="signup"){
+            await register();
+        }
+        await login();
+
+        setEmail("");
+        setName("");
+        setUsername("");
+        setPassword("");
+        setLoading(false);
+        window.location.reload();
+        // setIsOpen(false);
+    }
 
  
   return (
@@ -59,20 +100,55 @@ const AuthModal:React.FC<authModalProps> = ({
                 </div>
                 {/* <!-- Modal body --> */}
                 <div className="p-4 md:p-5">
-                    <form className="space-y-4" action="#">
+                    <form onSubmit={submit} className="space-y-4" action="#">
                         {   modal==="signup" &&
+                            <>
                             <div>
                                 <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your Name</label>
-                                <input type="text" name="name" className="bg-dark-gray border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="John Doe" required />
+                                <input type="text" 
+                                    name="name" 
+                                    className="bg-dark-gray border border-gray-300 
+                                    text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 
+                                    block w-full p-2.5 dark:border-gray-500 dark:placeholder-gray-400 
+                                    dark:text-white" placeholder="John Doe" required 
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
+                                />
                             </div>
+                            <div>
+                                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
+                                <input type="email" 
+                                className="bg-dark-gray border border-gray-300 text-gray-900 
+                                text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full 
+                                p-2.5 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" 
+                                placeholder="name@company.com" required 
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}    
+                            />
+                            </div>
+                            </>
                         }
                         <div>
-                            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
-                            <input type="email" name="email" id="email" className="bg-dark-gray border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="name@company.com" required />
+                            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Username</label>
+                            <input type="text" 
+                                    className="bg-dark-gray border border-gray-300 
+                                    text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 
+                                    block w-full p-2.5 dark:border-gray-500 dark:placeholder-gray-400 
+                                    dark:text-white" placeholder="username" required 
+                                    value={username}
+                                    onChange={(e) => setUsername(e.target.value)}
+                            />
                         </div>
+                        
                         <div>
                             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your password</label>
-                            <input type="password" name="password" id="password" placeholder="••••••••" className="bg-dark-gray border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required />
+                            <input type="password" placeholder="••••••••" 
+                            className="bg-dark-gray border border-gray-300 text-gray-900 text-sm 
+                            rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  
+                            dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required 
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}    
+                        />
                         </div>
                         <div className="flex justify-between">
                             <div className="flex items-start">
@@ -92,7 +168,7 @@ const AuthModal:React.FC<authModalProps> = ({
                              text={loading ?
                                 (modal=="login" ? "Logging in..." : "Creating account...") :
                                 (modal==="login" ? "Login to your account" : "Register")}
-                            onClick={() => {}}
+                            onClick={() => submit}
                         />      
                         <div className="text-sm font-medium text-gray-500 dark:text-gray-300">
                         {modal==="login" ? "Not registered?" : "Already have an account?"}  

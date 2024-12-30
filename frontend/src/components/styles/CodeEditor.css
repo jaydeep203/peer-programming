@@ -2,3 +2,11 @@
     background-color: #1e1e1e !important;
     color: #c5c5c5 !important;
 }
+
+.scrollbar-hidden::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hidden {
+    -ms-overflow-style: none; 
+    scrollbar-width: none; 
+  }

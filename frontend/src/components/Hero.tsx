@@ -1,10 +1,13 @@
-import { useSetRecoilState } from "recoil"
+import { useRecoilValue, useSetRecoilState } from "recoil"
 import Button from "./ui/Button"
-import { authModal } from "../store/atoms"
+import { authModal, isLoggedIn } from "../store/atoms"
 
 
 const Hero = () => {
   const setOpen = useSetRecoilState(authModal);
+  const loggedIn = useRecoilValue(isLoggedIn);
+
+
 
   return (
     <>
@@ -19,20 +22,39 @@ const Hero = () => {
         </h1>
         <p className="text-lg text-center text-gray-600 mb-8">It is a platform for building, shipping, and collaborating together to make things good.</p>
         <div className="flex space-x-4">
-          <Button 
-            className="bg-primary text-white hover:bg-primary-hover px-6 py-3 rounded-lg 
-            "
-            text="Sign up for free"
-            onClick={() => setOpen(true)}
-            primary
-          />
-          <Button 
-            className="bg-secondary text-secondary-text hover:bg-secondary-hover px-6 py-3 
-            rounded-lg hover:bg-sky-blue"
-            text="Start Building"
-            primary={false}
-            onClick={()=>{}}
-          />
+
+          {
+            loggedIn ? (
+              <Button 
+                className="bg-primary text-white hover:bg-primary-hover px-6 py-3 rounded-lg 
+                  "
+                text="Start Building"
+                primary={false}
+                onClick={()=>{}}
+              />
+            ) : (
+              <>
+              
+                <Button 
+                  className="bg-primary text-white hover:bg-primary-hover px-6 py-3 rounded-lg 
+                  "
+                  text="Start Building"
+                  primary={false}
+                  onClick={()=>{}}
+                />
+                <Button 
+                  className="bg-secondary text-secondary-text hover:bg-secondary-hover px-6 py-3 
+                  rounded-lg hover:bg-sky-blue"
+                  text="Sign up for free"
+                  onClick={() => setOpen(true)}
+                  primary
+                />
+
+              </>
+            )
+          }
+          
+          
         </div>
 
 

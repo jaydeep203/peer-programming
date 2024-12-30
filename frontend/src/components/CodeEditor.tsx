@@ -8,10 +8,11 @@ import React from "react";
 
 interface codeEditorProps{
   onChange: (newText:string) => void;
+  content: string;
 }
 
 const CodeEditor:React.FC<codeEditorProps> = ({
-  onChange
+  content, onChange
 }) => {
 
   const commands = [{
@@ -44,6 +45,7 @@ const CodeEditor:React.FC<codeEditorProps> = ({
         editorProps={{ $blockScrolling: true }}
         showPrintMargin={false}
         commands={commands}
+        value={content}
     />
   )
 }

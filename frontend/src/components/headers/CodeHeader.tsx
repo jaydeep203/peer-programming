@@ -1,8 +1,14 @@
 import { Link } from "react-router-dom";
 import Button from "../ui/Button";
+import React from "react";
 
+interface projectProps{
+  name: string;
+  language: string;
+  onChange: (e: any) => void;
+}
 
-const CodeHeader = () => {
+const CodeHeader:React.FC<projectProps> = ({name, language, onChange}) => {
   
   return (
     <div className="flex items-center justify-between p-3 h-[8vh] bg-background text-white">
@@ -11,13 +17,15 @@ const CodeHeader = () => {
         <Link to={"/"} className="text-gray-300 hover:text-white text-xl">
           ←
         </Link>
-        <span className="font-semibold">Project Name</span>
-        <select className="bg-gray-700 text-white p-1 rounded focus:outline-none">
-          <option>Language</option>
-          <option>JavaScript</option>
-          <option>Python</option>
-          <option>C++</option>
+        <span className="font-semibold text-white"> {name}</span>
+        
+        <select defaultValue={language} onChange={onChange} className="bg-gray-700 text-white p-1 rounded focus:outline-none">
+          <option value={"Java"}>Java</option>
+          <option value={"C++"} >C++</option>
+          <option value={"Python"}>Python</option>
+          <option value={"Javascript"}>JavaScript</option>
         </select>
+        
       </div>
 
       {/* Middle Section: Collaborate Icon */}
