@@ -3,6 +3,7 @@ package com.jaydeep.PeerPro.controller;
 import com.jaydeep.PeerPro.Entities.CollaborativeUpdate;
 import com.jaydeep.PeerPro.Entities.CursorPosition;
 import com.jaydeep.PeerPro.Entities.File;
+import com.jaydeep.PeerPro.Entities.Message;
 import com.jaydeep.PeerPro.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -21,6 +22,7 @@ public class CollaborationController {
         File file = fileService.getFile(update.getFileId());
         if(file!=null){
             file.setContent(update.getContent());
+            file.setLanguage(update.getLanguage());
             fileService.editFile(file.getId(), file);
         }
 
@@ -31,6 +33,12 @@ public class CollaborationController {
     @SendTo("/topic/cursor/{projectId}")
     public CursorPosition handleCursor(CursorPosition cursorPosition){
         return cursorPosition;
+    }
+
+    @MessageMapping("/messages/{projectId}")
+    @SendTo("/topic/messages/{projectId}")
+    public Message handleMessages(Message message){
+        return message;
     }
 
 }

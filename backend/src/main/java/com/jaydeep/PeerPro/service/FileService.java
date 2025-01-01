@@ -2,6 +2,7 @@ package com.jaydeep.PeerPro.service;
 
 
 import com.jaydeep.PeerPro.Entities.File;
+import com.jaydeep.PeerPro.Response.ExecutionResponse;
 
 public interface FileService {
 
@@ -12,4 +13,6 @@ public interface FileService {
     boolean deleteFile(String id);
 
     boolean editFile(String id, File editedFile);
+
+    ExecutionResponse executeCode(String id);
 }

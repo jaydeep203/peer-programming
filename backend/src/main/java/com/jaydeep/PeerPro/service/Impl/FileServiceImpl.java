@@ -2,12 +2,20 @@ package com.jaydeep.PeerPro.service.Impl;
 
 import com.jaydeep.PeerPro.Entities.File;
 import com.jaydeep.PeerPro.Entities.Project;
+import com.jaydeep.PeerPro.Response.ExecutionResponse;
 import com.jaydeep.PeerPro.repository.FileRepository;
 import com.jaydeep.PeerPro.repository.ProjectRepository;
 import com.jaydeep.PeerPro.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -18,6 +26,9 @@ public class FileServiceImpl implements FileService {
 
     @Autowired
     ProjectRepository projectRepository;
+
+    @Autowired
+    RestTemplate restTemplate;
 
     @Override
     public File getFile(String id) {
@@ -57,6 +68,23 @@ public class FileServiceImpl implements FileService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public ExecutionResponse executeCode(String id){
+        String apiUrl = "https://api.codex.jaagrav.in/";
+        File file = getFile(id);
+        Map<String, String> requestPayload = new HashMap<>();
+        requestPayload.put("code", file.getContent());
+        requestPayload.put("language", "cpp");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(requestPayload, headers);
+
+        ResponseEntity<ExecutionResponse> response = restTemplate.postForEntity(apiUrl, requestEntity, ExecutionResponse.class);
+        return response.getBody();
     }
 
 
