@@ -26,10 +26,11 @@ const CodeHeader:React.FC<projectProps> = ({
         <span className="font-semibold text-white"> {name}</span>
         
         <select defaultValue={language} onChange={onChange} className="bg-gray-700 text-white p-1 rounded focus:outline-none">
-          <option value={"Java"}>Java</option>
-          <option value={"C++"} >C++</option>
-          <option value={"Python"}>Python</option>
-          <option value={"Javascript"}>JavaScript</option>
+          <option value={"java"}>Java</option>
+          <option value={"cpp"} >C++</option>
+          <option value={"c"} >C</option>
+          <option value={"py"}>Python</option>
+          <option value={"js"}>JavaScript</option>
         </select>
         
       </div>

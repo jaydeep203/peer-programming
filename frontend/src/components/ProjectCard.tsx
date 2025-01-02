@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { LuGlobe, LuGlobeLock } from "react-icons/lu";
 import { Link } from "react-router-dom";
 
@@ -15,6 +15,27 @@ const ProjectCard:React.FC<projectProps> = ({
 }) => {
 
     const Icon = visibility=="private" ? LuGlobeLock : LuGlobe;
+  
+    const enumObj = [
+        {value:"C", lang:"c"},
+        {value:"C++", lang:"cpp"},
+        {value:"Java", lang:"java"},
+        {value:"JavaScript", lang:"js"},
+        {value:"Python", lang:"py"}
+    ];
+
+    const [lang, setLang] = useState("");
+
+    useEffect(() => {
+        for(let i=0; i<enumObj.length; i++){
+            if(language==enumObj[i].lang){
+                setLang(enumObj[i].value);
+            }
+        }
+    }, [language]);
+    
+
+
 
   return (
     <div className="
@@ -50,7 +71,7 @@ const ProjectCard:React.FC<projectProps> = ({
             <p className="
                 text-white
             ">
-                {language}
+                {lang}
             </p>
 
         </div>

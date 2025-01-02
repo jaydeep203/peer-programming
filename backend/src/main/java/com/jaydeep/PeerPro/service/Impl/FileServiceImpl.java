@@ -70,13 +70,20 @@ public class FileServiceImpl implements FileService {
         return false;
     }
 
+
     @Override
     public ExecutionResponse executeCode(String id){
         String apiUrl = "https://api.codex.jaagrav.in/";
         File file = getFile(id);
+        String code = file.getContent()
+                .replace("\\\\", "\\")  // Escape backslashes
+                .replace("\\\"", "\"")  // Escape double quotes
+                .replace("\\n", "\n")  // Escape newlines
+                .replace("\\r", "\r");
         Map<String, String> requestPayload = new HashMap<>();
-        requestPayload.put("code", file.getContent());
-        requestPayload.put("language", "cpp");
+        requestPayload.put("code", code);
+        requestPayload.put("language", file.getLanguage());
+        requestPayload.put("input", "");
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);

@@ -129,10 +129,11 @@ const ProjectModal = () => {
                             <label className="mb-2 text-sm font-medium text-white flex flex-row justify-left items-center">Select Language <LuComputer className='ml-2' /></label>
                             <select defaultValue={"C++"} onChange={(e) => setLanguage(e.target.value)} id="countries" className="bg-dark-gray border text-sm 
                             rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-gray-500 placeholder-gray-400 text-white">
-                                <option value="C++">C++</option>
-                                <option value="Java">Java</option>
-                                <option value="Python">Python</option>
-                                <option value="Javascript">Javascript</option>
+                                <option value="cpp">C++</option>
+                                <option value="c">C</option>
+                                <option value="java">Java</option>
+                                <option value="py">Python</option>
+                                <option value="js">JavaScript</option>
                             </select>  
                         
                         </div>

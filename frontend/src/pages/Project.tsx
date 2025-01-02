@@ -2,13 +2,10 @@ import { useEffect, useState } from "react"
 import CodeEditor from "../components/CodeEditor"
 import CodeHeader from "../components/headers/CodeHeader"
 import ChatWindow from "../components/ChatWindow";
-import axios from "axios";
 import { BACKEND_URL } from "../config";
 import { useParams } from "react-router-dom";
 import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
-import * as prettier from "prettier/standalone";
-import * as parserBabel from "prettier/parser-babel";
 import ExecutedResponse from "../components/ExecutedResponse";
 import { useRecoilValue } from "recoil";
 import { user } from "../store/atoms";
@@ -25,63 +22,15 @@ const Project = () => {
 
   const username = useRecoilValue(user)?.username || "";
 
-  const {project, content, loading, language, fileId, error, setContent, setLanguage} = useFetchProject(projectId || "");
+  const {project, content, loading, language, fileId, error, setContent, setLanguage, minifiedCode, beautifyCode} = useFetchProject(projectId || "");
 
-  const {executedResponse, executionLoading, executedError} = useExecution(projectId || "", fileId); 
-
-
-  const getParser = (lang) => {
-    switch (lang.toLowerCase()) {
-      case "javascript":
-        return "babel";
-      default:
-        return null;
-    }
-  };
-
-  const minifyCode = async (code:string, lang:string) => {
-    const parser = getParser(lang);
-    if (parser) {
-      try {
-        return prettier.format(code, {
-          parser,
-          plugins: [parserBabel],
-        });
-      } catch (error) {
-        console.error(`Error minifying ${lang}:`, error);
-      }
-    }
-
-    return code.replace(/\s+/g, " ").trim();
-  };
-
-  const beautifyCode = async(code:string, lang:string) => {
-    const parser = getParser(lang);
-    if (parser) {
-      try {
-        return await prettier.format(code, {
-          parser,
-          plugins: [parserBabel],
-        });
-      } catch (error) {
-        console.error(`Error beautifying ${lang}:`, error);
-      }
-    }
-  
-    return code.split(";")
-    .map((line) => line.trim())
-    .join(";\n")
-    .replace(/\s*\{\s*/g, " {\n")
-    .replace(/\s*\}\s*/g, "\n}\n")
-    .trim();
-  };
-  
+  const {executedResponse, executionLoading, executedError, handleRun} = useExecution(projectId || "", fileId);   
 
   const onChange = async(newText:string) => {
     setContent(newText);
 
     if(stompClient){
-      const minifiedText = await minifyCode(newText, language);
+      const minifiedText = minifiedCode(newText);
       stompClient.publish({
         destination: `/app/edit/${projectId}`,
         body: JSON.stringify({fileId, content: minifiedText, username:"currentUser", language:language})
@@ -119,8 +68,7 @@ const Project = () => {
     client.onConnect = () => {
       client.subscribe(`/topic/edit/${projectId}`, async(message) => {
         const update = JSON.parse(message.body);
-          console.log("Data renderd")
-          const beautifiedContent = await beautifyCode(update.content, language);
+          const beautifiedContent = beautifyCode(update.content);
           setContent(beautifiedContent);
           setLanguage(update.language);
       });
@@ -169,8 +117,6 @@ const Project = () => {
   // Fetch project
   useEffect(() => {
 
-    // fetchProject();
-
     if(!stompClient){
       setupWebSocket();
     }
@@ -194,6 +140,14 @@ const Project = () => {
     )
   }
 
+  if(error){
+    return (
+      <div className="text-2xl text-white bg-black">
+        {error}
+      </div>
+    )
+  }
+
   return (
     <>
       <CodeHeader name={project?.name || ""} 
@@ -212,7 +166,7 @@ const Project = () => {
           <div className="w-full flex flex-row h-[91vh] px-2 bg-background">
             {/* Main Code Editor Panel */}
             <div className="w-[62%] max-h-full h-full bg-[#282828] p-4 border border-gray-300">
-              <CodeEditor content={content} onChange={onChange} />
+              <CodeEditor content={content} onChange={onChange} language={language} />
             </div>
 
             {/* Right Section: Chat Window and Console */}

@@ -19,6 +19,8 @@ const Profile = () => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  
+
   const logout = () => {
     localStorage.removeItem("token")
     navigate("/");
@@ -42,7 +44,6 @@ const Profile = () => {
       console.log(err);
       setLoading(false);
     }
-
 
   }
 

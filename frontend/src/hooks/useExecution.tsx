@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { BACKEND_URL } from "../config";
 
 
@@ -9,7 +9,6 @@ const useExecution = (projectId:string, fileId:string) => {
     const [executedResponse, setExecutedResponse] = useState({});
     const [executedError, setExecutedError] = useState(null);
 
-    useEffect(() => {
         const handleRun = async() => {
             try{
                 setExecutionLoading(true);
@@ -31,11 +30,8 @@ const useExecution = (projectId:string, fileId:string) => {
             }
         }
 
-        handleRun();
-    });
 
-
-    return {executedResponse, executionLoading, executedError};
+    return {executedResponse, executionLoading, executedError, handleRun};
 
 
 }

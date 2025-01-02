@@ -11,9 +11,12 @@ const useFetchProject = (projectId:string) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const beautifyCode = async (code, language) => {
-    // Implement your beautify logic here, or replace with a library like prettier.
-    return code; // This is just a placeholder
+  const minifiedCode = (code:string) => {
+    return code.replace(/\n/g, "\\n").replace(/"/g, '\\"');
+  }
+
+  const beautifyCode = (minifiedCode:string) => {
+    return minifiedCode.replace(/\\n/g, "\n").replace(/\\"/g, '"');
   };
 
   useEffect(() => {
@@ -29,7 +32,7 @@ const useFetchProject = (projectId:string) => {
           setLanguage(projectData.file.language);
           setFileId(projectData.file.id);
           const minifiedContent = response.data.project.file.content || "write your code here..";
-          const beautifiedContent = await beautifyCode(minifiedContent, projectData.file.language);
+          const beautifiedContent = beautifyCode(minifiedContent);
           setContent(beautifiedContent);
   
         }
@@ -48,7 +51,7 @@ const useFetchProject = (projectId:string) => {
 
   }, [projectId]);
 
-  return {loading, error, project, fileId, language, content, setContent, setLanguage};
+  return {loading, error, project, fileId, language, content, setContent, setLanguage, minifiedCode, beautifyCode};
     
 
 }

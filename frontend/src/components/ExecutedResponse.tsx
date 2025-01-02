@@ -6,28 +6,33 @@ interface executedResponseProps{
 }
 
 const ExecutedResponse:React.FC<executedResponseProps> = ({executedRes, error}) => {
+
   return (
     <div className='
         w-full
     '>
         {
-          error!="" && (
+          error ? (
             <p className="
               text-primary
               font-mono
             ">
-              Error : 
-              { error}
+              
+              {error ? "Error : " + error : ""} 
+            </p>
+          )
+          : (
+            <p className="
+              text-white
+              font-mono
+            ">
+              
+              {executedRes ? "Output : " + executedRes : ""}
             </p>
           )
         }
 
-        <p className="
-          text-white
-          font-mono
-        ">
-          {executedRes}
-        </p>
+        
     </div>
   )
 }
