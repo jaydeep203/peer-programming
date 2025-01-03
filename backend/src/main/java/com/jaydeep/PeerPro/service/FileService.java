@@ -14,5 +14,5 @@ public interface FileService {
 
     boolean editFile(String id, File editedFile);
 
-    ExecutionResponse executeCode(String id);
+    ExecutionResponse executeCode(String id, String input);
 }

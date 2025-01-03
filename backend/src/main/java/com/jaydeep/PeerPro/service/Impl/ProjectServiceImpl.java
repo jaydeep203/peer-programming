@@ -8,8 +8,10 @@ import com.jaydeep.PeerPro.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -50,10 +52,15 @@ public class ProjectServiceImpl implements ProjectService {
         Optional<Project> projectOptional = projectRepository.findById(id);
         if(projectOptional.isPresent()){
             Project project = projectOptional.get();
-            project.setName(updatedProject.getName());
-            project.setDescription(updatedProject.getDescription());
-            project.setUpdatedAt(updatedProject.getUpdatedAt());
-            project.setVisibility(updatedProject.getVisibility());
+            if(updatedProject.getName()!=null){
+                project.setName(updatedProject.getName());
+            }
+            if(updatedProject.getDescription()!=null){
+                project.setDescription(updatedProject.getDescription());
+            }
+            if(updatedProject.getVisibility()!=null){
+                project.setVisibility(updatedProject.getVisibility());
+            }
             projectRepository.save(project);
             return true;
         }
@@ -62,8 +69,17 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Project getProject(String id) {
-        return projectRepository.findById(id).orElse(null);
+    public Project getProject(String id, String username) {
+        Optional<Project> projectOptional = projectRepository.findById(id);
+        if(projectOptional.isPresent()){
+            Project project = projectOptional.get();
+            String projectOwner = project.getUser().getUsername();
+            if(Objects.equals(project.getVisibility(), "Public") || (Objects.equals(projectOwner, username))){
+                return project;
+            }
+        }
+
+        return null;
     }
 
     @Override

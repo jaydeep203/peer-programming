@@ -24,7 +24,7 @@ const Project = () => {
 
   const {project, content, loading, language, fileId, error, setContent, setLanguage, minifiedCode, beautifyCode} = useFetchProject(projectId || "");
 
-  const {executedResponse, executionLoading, executedError, handleRun} = useExecution(projectId || "", fileId);   
+  const {executedResponse, executionLoading, executedError, input, handleRun, onChangeInput} = useExecution(projectId || "", fileId);   
 
   const onChange = async(newText:string) => {
     setContent(newText);
@@ -155,6 +155,7 @@ const Project = () => {
         language={language|| ""} 
         onChange={handleLanguage} 
         execute={handleRun} 
+        visible={project?.visibility || ""}
       />
       <div className="
         w-full
@@ -178,7 +179,7 @@ const Project = () => {
 
               {/* Console */}
               <div className="w-full h-full bg-[#282828] p-4 border border-gray-300 rounded">
-                  <ExecutedResponse executedRes={executedResponse?.output} error={executedResponse?.error} />
+                  <ExecutedResponse input={input} onChange={onChangeInput} executedRes={executedResponse?.output} error={executedResponse?.error} />
               </div>
             </div>
           </div>

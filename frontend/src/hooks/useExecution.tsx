@@ -8,12 +8,21 @@ const useExecution = (projectId:string, fileId:string) => {
     const [executionLoading, setExecutionLoading] = useState(false);
     const [executedResponse, setExecutedResponse] = useState({});
     const [executedError, setExecutedError] = useState(null);
+    const [input, setInput] = useState("");
+
+    const beautifyResponse = (minifiedResp:string) => {
+      return minifiedResp.replace(/\\n/g, "\n").replace(/\\"/g, '"');
+    };
+
+        const onChangeInput = (e:any) => {
+          setInput(e.target.value);
+        }
 
         const handleRun = async() => {
             try{
                 setExecutionLoading(true);
         
-                const res = await axios.get(`${BACKEND_URL}/api/v1/${projectId}/${fileId}/execute`, {headers:{
+                const res = await axios.post(`${BACKEND_URL}/api/v1/${projectId}/${fileId}/execute`, {input} , {headers:{
                   Authorization: localStorage.getItem("token")
                 }});
         
@@ -31,7 +40,8 @@ const useExecution = (projectId:string, fileId:string) => {
         }
 
 
-    return {executedResponse, executionLoading, executedError, handleRun};
+
+    return {executedResponse, executionLoading, executedError, input, handleRun, onChangeInput};
 
 
 }

@@ -11,7 +11,7 @@ public interface ProjectService {
     boolean deleteProject(String id);
     boolean updateProject(String id, Project updatedProject);
 
-    Project getProject(String id);
+    Project getProject(String id, String username);
 
     List<Project> findByUserId(String userId);
 }

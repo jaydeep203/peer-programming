@@ -24,7 +24,6 @@ public class UserController {
 
     @PostMapping("/login")
     public JwtResponseDTO login(@RequestBody User user){
-        System.out.println("Login");
         String token = service.verify(user);
         return new JwtResponseDTO("Welcome Back", token);
     }
@@ -44,6 +43,20 @@ public class UserController {
         response.put("message", "Invalid token");
         response.put("user", null);
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+    @PostMapping("/profile")
+    public ResponseEntity<?> updateProfile(@RequestBody User updatedUser){
+        User user = service.updateProfile(updatedUser);
+        Map<String, Object> response = new HashMap<>();
+        if(user!=null){
+            response.put("message", "User is updated successfully.");
+            response.put("success", true);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+        response.put("message", "User not updated");
+        response.put("success", false);
+        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 

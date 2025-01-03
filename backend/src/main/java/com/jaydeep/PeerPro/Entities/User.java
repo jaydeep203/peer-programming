@@ -23,7 +23,7 @@ public class User {
     private String password;
     @Column(length = 255)
     private String profilePic;
-    @Column(length = 500)
+    @Column(length = 1000)
     private String bio;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)

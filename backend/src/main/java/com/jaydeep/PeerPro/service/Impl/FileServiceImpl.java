@@ -72,7 +72,7 @@ public class FileServiceImpl implements FileService {
 
 
     @Override
-    public ExecutionResponse executeCode(String id){
+    public ExecutionResponse executeCode(String id, String input){
         String apiUrl = "https://api.codex.jaagrav.in/";
         File file = getFile(id);
         String code = file.getContent()
@@ -83,7 +83,7 @@ public class FileServiceImpl implements FileService {
         Map<String, String> requestPayload = new HashMap<>();
         requestPayload.put("code", code);
         requestPayload.put("language", file.getLanguage());
-        requestPayload.put("input", "");
+        requestPayload.put("input", input);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);

@@ -5,6 +5,7 @@ import { twMerge } from 'tailwind-merge';
 import Button from '../ui/Button';
 import axios from 'axios';
 import { BACKEND_URL } from '../../config';
+import toast from 'react-hot-toast';
 
 
 const AuthModal = () => {
@@ -25,8 +26,11 @@ const AuthModal = () => {
             });
             if(response && response.data && response.data.accessToken)
                 localStorage.setItem("token", "Bearer "+response.data.accessToken);
+
+            toast.success("Welcome Back!");
         } catch(e){
             console.log(e);
+            toast.error("Unable to log in!");
         }
     }
 
@@ -36,8 +40,11 @@ const AuthModal = () => {
                 name, email, password, username
             });
 
+            toast.success("Registered successfully!");
+
         }catch(e){
             console.log(e);
+            toast.error("Unable to register!");
         }
     }
 
@@ -56,7 +63,6 @@ const AuthModal = () => {
         setPassword("");
         setLoading(false);
         window.location.reload();
-        // setIsOpen(false);
     }
 
  
@@ -165,14 +171,14 @@ const AuthModal = () => {
                             className="w-full text-white focus:ring-4 
                             focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5
                              text-center flex justify-center"
-                             text={loading ?
-                                (modal=="login" ? "Logging in..." : "Creating account...") :
-                                (modal==="login" ? "Login to your account" : "Register")}
+                             text={(modal==="login" ? "Login to your account" : "Register")}
                             onClick={() => submit}
+                            loading={loading}
+                            disabled={loading}
                         />      
                         <div className="text-sm font-medium text-gray-500 dark:text-gray-300">
                         {modal==="login" ? "Not registered?" : "Already have an account?"}  
-                        <button onClick={() => {
+                        <button disabled={loading} onClick={() => {
                             if(modal=="login"){
                                 setModal("signup");
                             }

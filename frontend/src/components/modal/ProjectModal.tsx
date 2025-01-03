@@ -7,6 +7,7 @@ import { useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import { BACKEND_URL } from '../../config';
 import { LuComputer, LuEye} from 'react-icons/lu';
+import toast from 'react-hot-toast';
 
 const ProjectModal = () => {
 
@@ -17,12 +18,12 @@ const ProjectModal = () => {
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
     const [language, setLanguage] = useState("C++");
-    const [visibility, setVisibility] = useState<string>("private");
+    const [visibility, setVisibility] = useState<string>("Private");
     const [loading, setLoading] = useState(false);
 
     const submit = async(e:React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-
+        setLoading(true);
         try{
 
             const response = await axios.post(`${BACKEND_URL}/api/v1/project/`, {name, description, visibility, }, {
@@ -32,18 +33,20 @@ const ProjectModal = () => {
             if(response.data.project.id){
                 setName("");
                 setDescription("");
-                setVisibility("private");
+                setVisibility("Private");
             }
 
             await axios.post(`${BACKEND_URL}/api/v1/${response.data.project.id}/`, {language, content:""}, {
                 headers: {Authorization: localStorage.getItem("token")}
             });
 
+            toast.success("Project created successfully.");
             setLanguage("C++");
             navigate(`/project/${response.data.project.id}/`);
 
         }catch(err){
             console.log(err);
+            toast.error("Unable to create project!")
         }
 
         setIsOpen(false);
@@ -144,10 +147,10 @@ const ProjectModal = () => {
                             className="w-full text-white focus:ring-4 
                             focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5
                             text-center flex justify-center"
-                            text={
-                                loading ? "Creating project..." : "Create Project"
-                            }
+                            text="Create Project"
                             onClick={() => submit}
+                            loading={loading}
+                            disabled={loading}
                         /> 
                     </form>
                 </div>

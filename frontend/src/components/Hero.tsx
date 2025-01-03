@@ -1,10 +1,11 @@
 import { useRecoilValue, useSetRecoilState } from "recoil"
 import Button from "./ui/Button"
-import { authModal, isLoggedIn } from "../store/atoms"
+import { authModal, createProjectModal, isLoggedIn } from "../store/atoms"
 
 
 const Hero = () => {
   const setOpen = useSetRecoilState(authModal);
+  const setProject = useSetRecoilState(createProjectModal);
   const loggedIn = useRecoilValue(isLoggedIn);
 
 
@@ -30,7 +31,7 @@ const Hero = () => {
                   "
                 text="Start Building"
                 primary={false}
-                onClick={()=>{}}
+                onClick={()=> setProject(true)}
               />
             ) : (
               <>
@@ -40,7 +41,7 @@ const Hero = () => {
                   "
                   text="Start Building"
                   primary={false}
-                  onClick={()=>{}}
+                  onClick={() => setOpen(true)}
                 />
                 <Button 
                   className="bg-secondary text-secondary-text hover:bg-secondary-hover px-6 py-3 

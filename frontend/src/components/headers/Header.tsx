@@ -3,7 +3,7 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { authModal, createProjectModal, isLoggedIn, user } from '../../store/atoms';
 import Button from '../ui/Button'
 import { Link, useLocation} from 'react-router-dom'
-import { LuInfo, LuPlus, LuUser } from 'react-icons/lu';
+import { LuPlus, LuUser } from 'react-icons/lu';
 
 const Header = () => {
   const pathname = useLocation().pathname;
@@ -19,6 +19,14 @@ const Header = () => {
     }
   }
 
+    const projectModal = () => {
+      if(!loggedIn){
+        createProject(true)
+      }
+      else{
+        setIsOpen(prev => !prev);
+      }
+    }
 
   return (
     <header className="
@@ -46,12 +54,9 @@ const Header = () => {
             items-center
             gap-8
           ">
-            <button onClick={() => createProject(true)}  className="text-white hover:text-primary-hover transition flex flex-row items-center">
+            <button onClick={projectModal}  className="text-white hover:text-primary-hover transition flex flex-row items-center">
               New Project <LuPlus className='ml-1' />
             </button>
-            <Link to={"/about"} className={`${pathname=="/about" ? "text-primary" : "text-white hover:text-primary-hover transition"} flex flex-row items-center`}>
-              About <LuInfo className='ml-1' />
-            </Link>
           </nav>
         </div>
 

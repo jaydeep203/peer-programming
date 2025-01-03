@@ -52,8 +52,21 @@ public class UserService {
             user.setUserId(userOptional.get().getUserId());
             return user;
         }
-
         return null;
     }
 
+    public User updateProfile(User updatedUser) {
+        Optional<User> userOptional = Optional.ofNullable(repo.findByUsername(updatedUser.getUsername()));
+        if(userOptional.isPresent()){
+            User user = userOptional.get();
+            user.setEmail(updatedUser.getEmail());
+            user.setName(updatedUser.getName());
+            user.setBio(updatedUser.getBio());
+            user.setUsername(updatedUser.getUsername());
+            user.setProfilePic(updatedUser.getProfilePic());
+            repo.save(user);
+            return user;
+        }
+        return null;
+    }
 }

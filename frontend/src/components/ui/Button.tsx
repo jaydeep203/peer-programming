@@ -1,5 +1,7 @@
 import React from "react";
+import { IconType } from "react-icons";
 import { twMerge } from "tailwind-merge";
+import CircularLoader from "../loader/CircularLoader";
 
 interface ButtonProps {
   text: string;
@@ -8,6 +10,8 @@ interface ButtonProps {
   type?: 'button' | 'submit' | 'reset';
   className?:string;
   loading?:boolean;
+  disabled?:boolean;
+  Icon?: IconType;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -16,10 +20,13 @@ const Button: React.FC<ButtonProps> = ({
   onClick,
   type = "button",
   className,
-  loading
+  loading,
+  disabled,
+  Icon
 }) => {
   return (
       <button
+          disabled={disabled}
           onClick={onClick}
           type={type}
           className={twMerge(`
@@ -29,7 +36,7 @@ const Button: React.FC<ButtonProps> = ({
               rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center transition
             `, className )}
       >
-          {loading ? "Loading..." : text}
+          {loading ? <CircularLoader /> : text} {!loading && Icon && <Icon className="ml-2" />}
       </button>
   );
 }

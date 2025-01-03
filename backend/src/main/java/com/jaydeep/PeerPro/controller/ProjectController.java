@@ -23,8 +23,9 @@ public class ProjectController {
     private UserService userService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getProject(@PathVariable String id){
-            Project project = projectService.getProject(id);
+    public ResponseEntity<?> getProject(@PathVariable String id, HttpServletRequest request){
+            String username = (String) request.getAttribute("username");
+            Project project = projectService.getProject(id, username);
             Map<String, Object> response = new HashMap<>();
             if(project!=null){
                 response.put("message", "Project found.");

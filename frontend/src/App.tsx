@@ -1,7 +1,6 @@
 import './App.css'
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from './pages/Home';
-import About from './pages/About';
 import Project from './pages/Project';
 import AuthModal from './components/modal/AuthModal';
 import { useSetRecoilState } from 'recoil';
@@ -11,6 +10,7 @@ import { isLoggedIn, user } from './store/atoms';
 import axios from 'axios';
 import { BACKEND_URL } from './config';
 import Profile from './pages/Profile';
+import { Toaster } from 'react-hot-toast';
 
 
 
@@ -63,11 +63,11 @@ function App() {
 
   return (
     <BrowserRouter>
+        <Toaster />
         <AuthModal />
         <ProjectModal />
         <Routes>
           <Route path={"/"} element={<Home />} />
-          <Route path={"/about"} element={<About />} />
           <Route path={"/project/:projectId"} element={<Project />} />
           <Route path={"/profile/:userId"} element={<Profile />} />
         </Routes>

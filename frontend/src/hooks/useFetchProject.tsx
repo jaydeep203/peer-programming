@@ -1,6 +1,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { BACKEND_URL } from "../config";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 
 const useFetchProject = (projectId:string) => {
@@ -10,6 +12,8 @@ const useFetchProject = (projectId:string) => {
   const [language, setLanguage] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const navigate = useNavigate();
 
   const minifiedCode = (code:string) => {
     return code.replace(/\n/g, "\\n").replace(/"/g, '\\"');
@@ -41,7 +45,9 @@ const useFetchProject = (projectId:string) => {
   
       }catch(err){
         console.log(err);
+        toast.error("Unable to fetch project!");
         setError(err);
+        navigate("/");
         setLoading(false);
       }
 

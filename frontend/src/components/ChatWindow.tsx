@@ -3,7 +3,7 @@ import { FaPaperPlane } from "react-icons/fa";
 import { useRecoilValue } from "recoil";
 import { twMerge } from "tailwind-merge";
 import { user } from "../store/atoms";
-
+import ScrollToBottom from "react-scroll-to-bottom";
 
 interface chatWindowProps{
   messages: {username:string, message:string}[] | null;
@@ -16,24 +16,30 @@ const ChatWindow:React.FC<chatWindowProps> = ({
   const [message, setMessage] = useState("");
   const username = useRecoilValue(user)?.username || "";
 
+  const onStartMessages = () => {
+    sendMessage("Hi👋");
+  }
+
 
   return (
     <div className="w-full h-full max-h-full min-h-full bg-background p-2 rounded-lg shadow-md text-white flex flex-col">
       {/* Chat header */}
       <div className="flex justify-between items-center mb-3">
         <h2 className="text-md font-semibold">Chat Window</h2>
-        <button className="bg-primary hover:bg-primary-hover text-white px-3 py-1 text-xs rounded-lg focus:outline-none">
+        <button onClick={onStartMessages} className="bg-primary hover:bg-primary-hover text-white px-3 py-1 text-xs rounded-lg focus:outline-none">
           Start Chat
         </button>
       </div>
 
       {/* Messages area */}
       <div className="bg-[#1A1A1A] p-3 rounded-lg mb-3 max-h-[68%] h-full">
-        {/* Placeholder messages */}
 
-        <div className="
+        <ScrollToBottom className="
           flex flex-col items-center overflow-y-scroll scrollbar-hidden max-h-full h-full w-full
         ">
+          <div className="
+            flex flex-col items-center max-h-full h-full w-full
+          " >
           { 
             messages?.map((item, index) => (
 
@@ -50,9 +56,8 @@ const ChatWindow:React.FC<chatWindowProps> = ({
               </div>
             ))
           }
-        </div>
-        
-        {/* Add more messages dynamically here */}
+          </div>
+        </ScrollToBottom>
       </div>
 
       {/* Message input and send button */}

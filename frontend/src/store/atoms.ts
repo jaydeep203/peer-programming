@@ -19,6 +19,16 @@ export const createProjectModal = atom<boolean>({
     default: false,
 });
 
+export const profileEditModal = atom<boolean>({
+    key: 'profileEditModal',
+    default: false,
+});
+
+export const projectShareModal = atom<boolean>({
+    key: 'projectShareModal',
+    default: false,
+});
+
 export const isLoggedIn = atom<boolean>({
     key: 'isLoggedIn',
     default: false

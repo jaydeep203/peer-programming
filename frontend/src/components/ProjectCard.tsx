@@ -14,7 +14,7 @@ const ProjectCard:React.FC<projectProps> = ({
    id, name, visibility, language
 }) => {
 
-    const Icon = visibility=="private" ? LuGlobeLock : LuGlobe;
+    const Icon = visibility=="Private" ? LuGlobeLock : LuGlobe;
   
     const enumObj = [
         {value:"C", lang:"c"},

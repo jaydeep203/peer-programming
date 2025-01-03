@@ -1,19 +1,21 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Header from "../components/headers/Header";
-import { LuArrowLeft, LuLogOut } from "react-icons/lu";
-import { useRecoilValue } from "recoil";
-import { user } from "../store/atoms";
+import { LuArrowLeft, LuLogOut, LuPen } from "react-icons/lu";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { profileEditModal, user } from "../store/atoms";
 import ProjectCard from "../components/ProjectCard";
 
 import '../components/styles/CodeEditor.css';
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { BACKEND_URL } from "../config";
+import ProfileEdit from "../components/modal/ProfileEdit";
 
 
 const Profile = () => {
 
   const userInfo = useRecoilValue(user);
+  const setProfileModal = useSetRecoilState(profileEditModal);
   const navigate = useNavigate();
   const { userId } = useParams();
   const [projects, setProjects] = useState([]);
@@ -56,6 +58,7 @@ const Profile = () => {
     <>
 
       <Header />
+      <ProfileEdit />
 
       {/* Body */}
 
@@ -107,6 +110,15 @@ const Profile = () => {
             gap-3
           "> 
 
+            <button onClick={() => setProfileModal(true)} 
+            className="text-white w-36 hover:bg-neutral-800 bg-opacity-20
+              flex flex-row items-center 
+              justify-center gap-3
+              px-3 py-1 rounded-lg ml-auto
+            ">
+              Profile Edit <LuPen />
+            </button>
+
             <img src={userInfo?.profilePic || "/user.png"} 
               alt="Profile Image" 
               className="
@@ -138,6 +150,7 @@ const Profile = () => {
             <p className="
               text-white
             ">
+              <strong>Bio - </strong>
               {userInfo?.bio}
             </p>
 

@@ -2,6 +2,7 @@ package com.jaydeep.PeerPro.controller;
 
 import com.jaydeep.PeerPro.Entities.File;
 import com.jaydeep.PeerPro.Response.ExecutionResponse;
+import com.jaydeep.PeerPro.request.CodeInput;
 import com.jaydeep.PeerPro.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -50,9 +51,9 @@ public class FileController {
         return new ResponseEntity<>("File not found", HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/{id}/execute")
-    public ResponseEntity<?> executeCode(@PathVariable String projectId, @PathVariable String id){
-         ExecutionResponse response = fileService.executeCode(id);
+    @PostMapping("/{id}/execute")
+    public ResponseEntity<?> executeCode(@PathVariable String projectId, @PathVariable String id, @RequestBody CodeInput input){
+        ExecutionResponse response = fileService.executeCode(id, input.getInput());
          return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

@@ -1,23 +1,29 @@
 import { Link } from "react-router-dom";
 import Button from "../ui/Button";
 import React from "react";
-import { LuArrowLeft } from "react-icons/lu";
+import { LuArrowLeft, LuPlay, LuShare2 } from "react-icons/lu";
+import { useSetRecoilState } from "recoil";
+import { projectShareModal } from "../../store/atoms";
+import ProjectShareModal from "../modal/ProjectShareModal";
 
 interface projectProps{
   name: string;
   language: string;
   onChange: (e: any) => void;
   execute: () => void;
-  executionLoading: boolean;  
+  executionLoading: boolean; 
+  visible:string; 
 }
 
 const CodeHeader:React.FC<projectProps> = ({
-    name, language, onChange, execute, executionLoading
+    name, language, visible, onChange, execute, executionLoading
 }) => {
 
+  const setShareModal = useSetRecoilState(projectShareModal);
   
   return (
     <div className="flex items-center justify-between p-3 h-[8vh] bg-background text-white">
+      <ProjectShareModal visible={visible} />
       {/* Left Section: Project Name and Language */}
       <div className="flex items-center space-x-4">
         <Link to={"/"} className="text-neutral-200 hover:text-white text-xl">
@@ -47,16 +53,19 @@ const CodeHeader:React.FC<projectProps> = ({
       <div className="flex space-x-4">
         <Button 
           text="Share"
+          Icon={LuShare2}
           className="text-white text-xs py-1.5"
           primary
-          onClick={() => console.log("I ma full")}
+          onClick={() => setShareModal(true)}
         />
 
         <Button 
           className="bg-[#279F3D] hover:bg-[#258537] text-white text-xs py-1.5"
           text="Run Code"
+          Icon={LuPlay}
           primary={false}
           loading={executionLoading}
+          disabled={executionLoading}
           onClick={execute}
         />
       </div>
