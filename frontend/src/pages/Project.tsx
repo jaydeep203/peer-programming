@@ -11,6 +11,7 @@ import { useRecoilValue } from "recoil";
 import { user } from "../store/atoms";
 import useFetchProject from "../hooks/useFetchProject";
 import useExecution from "../hooks/useExecution";
+import CircularLoader from "../components/loader/CircularLoader";
 
 
 
@@ -136,8 +137,10 @@ const Project = () => {
 
   if(loading){
     return (
-      <div className="text-2xl text-white bg-black"> Loading...</div>
-    )
+      <div className="text-2xl text-white bg-black w-screen h-screen flex items-center justify-center"> 
+        <CircularLoader className="w-10 h-10" />
+      </div>
+    ) 
   }
 
   if(error){

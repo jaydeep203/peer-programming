@@ -19,9 +19,11 @@ const Hero = () => {
     ">
 
         <h1 className="text-4xl md:text-6xl font-bold text-center text-white mb-4">
-          Build Software Faster and Together
+          Learn Faster and Together with fun!
         </h1>
-        <p className="text-lg text-center text-gray-600 mb-8">It is a platform for building, shipping, and collaborating together to make things good.</p>
+        <p className="text-lg text-center text-gray-600 mb-8">
+            It is a platform for learning, coding {"</>"} and collaborating together to make things good.
+        </p>
         <div className="flex space-x-4">
 
           {
@@ -29,7 +31,7 @@ const Hero = () => {
               <Button 
                 className="bg-primary text-white hover:bg-primary-hover px-6 py-3 rounded-lg 
                   "
-                text="Start Building"
+                text="Start Coding </>"
                 primary={false}
                 onClick={()=> setProject(true)}
               />
@@ -39,7 +41,7 @@ const Hero = () => {
                 <Button 
                   className="bg-primary text-white hover:bg-primary-hover px-6 py-3 rounded-lg 
                   "
-                  text="Start Building"
+                  text="Start Coding </>"
                   primary={false}
                   onClick={() => setOpen(true)}
                 />

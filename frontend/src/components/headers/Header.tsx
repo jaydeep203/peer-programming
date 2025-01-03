@@ -20,7 +20,7 @@ const Header = () => {
   }
 
     const projectModal = () => {
-      if(!loggedIn){
+      if(loggedIn){
         createProject(true)
       }
       else{
@@ -39,13 +39,13 @@ const Header = () => {
         text-white
       ">
         <div className="
-          flex flex-row justify-between items-center
+          flex flex-row gap-16 items-center
           w-[25%]
         ">
           <Link to={"/"} className="flex flex-row items-center">
             <img src="/Logo.png" className="w-14 h-14" />
             <h1 className='font-extrabold text-xl'>
-              PeerPro
+              PeerPro {"</>"}
             </h1>
           </Link>
           <nav className="
@@ -62,7 +62,11 @@ const Header = () => {
 
         {
           loggedIn ? (
-            <Link to={`/profile/${userId}`} className='text-white hover:bg-slate-800 p-2 cursor-pointer' ><LuUser /> </Link>
+            <Link to={`/profile/${userId}`} 
+              className='text-white hover:bg-slate-800 p-2 cursor-pointer flex flex-col items-center rounded-md' >
+                <LuUser /> 
+                Profile
+            </Link>
           ) : (
               <div className="flex flex-row gap-3">
                 <Button 
